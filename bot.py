@@ -85,7 +85,7 @@ async def on_message(message):
         if message.content == "!hello":
             await message.channel.send("Hey qt {0.mention}!".format(message.author))
         elif message.content == '!help':
-            await message.channel.send(">>> Hey baby {0.mention}! we have some awesome commands \n``` - !abort (HENRY ONLY) \n - !hello \n - !getAh \n - !testMessage \n - !runCode (HENRY ONLY) \n - !checkVar```".format(message.author))
+            await message.channel.send(">>> Hey baby {0.mention}! we have some awesome commands \n``` - !abort (HENRY ONLY) \n - !hello \n - !getAh \n - !testMessage \n - !runCode (HENRY ONLY) \n - !checkVar \n !setMin #(min) \n !setMax #(max)```".format(message.author))
         elif message.content == "!abort":
             toggled == False
             global aborting
