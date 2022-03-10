@@ -1,4 +1,3 @@
-from lib2to3.pgen2.literals import evalString
 import discord
 import json
 import requests as r
