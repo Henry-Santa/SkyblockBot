@@ -1,7 +1,22 @@
+"""
+
+Make sure you have a config.json in the working folder
+
+it should be laid out like
+
+{
+    "token" : "Your Discord Token",
+    "clientid": "Your Discord App's Client ID",
+    "guildId": "Your Discord Server's id",
+    "apiKey": "Your hypixel api key"
+}
+
+"""
+
+
 import discord
 import json
 import requests as r
-import threading
 import time
 url = "https://api.hypixel.net/skyblock/auctions"
 MojangUrl = "https://sessionserver.mojang.com/session/minecraft/profile/"
