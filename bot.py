@@ -77,13 +77,15 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global toggled
+    global minimumProf
+    global maxRisk
     if message.author == client.user:
         return
     if message.content.startswith('!'):
         if message.content == "!hello":
             await message.channel.send("Hey qt {0.mention}!".format(message.author))
         elif message.content == '!help':
-            await message.channel.send(">>> Hey baby {0.mention}! we have some awesome commands \n``` - !abort (HENRY ONLY) \n - !hello \n - !getAh \n - !testMessage \n - !runCode (HENRY ONLY)```".format(message.author))
+            await message.channel.send(">>> Hey baby {0.mention}! we have some awesome commands \n``` - !abort (HENRY ONLY) \n - !hello \n - !getAh \n - !testMessage \n - !runCode (HENRY ONLY) \n - !checkVar```".format(message.author))
         elif message.content == "!abort":
             toggled == False
             global aborting
@@ -113,6 +115,13 @@ async def on_message(message):
         elif message.content.startswith("!runCode ") and message.author.name +"#"+ message.author.discriminator == "HardShellTurtle#0001":
             print("|"+message.content[9::]+"|")
             eval(message.content[9::])
+        elif message.content == "!checkVar":
+            await message.channel.send(">>> Min prof : " + str(minimumProf/1000000) +"m\nMax risk : " + str(maxRisk/1000000) + "m")
+        elif message.content.startswith("!set"):
+            if message.content.startswith("!setMin "):
+                minimumProf = int(message.content[9::])
+            elif message.content.startswith("!setMax "):
+                maxRisk = int(message.content[9::])
 def RunProg():
     global toggled
     global aborting
