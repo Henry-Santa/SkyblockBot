@@ -20,10 +20,10 @@ import requests as r
 import time
 url = "https://api.hypixel.net/skyblock/auctions"
 MojangUrl = "https://sessionserver.mojang.com/session/minecraft/profile/"
-minimumProf = 1000000
+minimumProf = 2000000
 maxRisk = 15000000
 bannedKeywords = ["Cosmetic", "Furniture", "Skin", "Jerry", "EnchantedBook", "Rune", "Pet", "[Lvl", "[", "Lvl","pet","theFish", "the Fish","thefish"]
-reforges = ["Loving","Gentle","Odd","Fast","Fair","Epic","Sharp","Heroic","Spicy","Legendary","Dirty","Fabled","Suspicious","Gilded","Warped","Withered","Bulky","Salty","Treacherous","Stiff","Lucky","Very","Highly","Extremely","Thicc","Absolutely","Even More", "Wise","Strong","Superior","Heavy","Light","Perfect","Refined","Deadly","Fine","Grand","Hasty","Neat","Rapid","Unreal","Awkward","Rich","Precise","Spiritual","Headstrong","Clean","Fierce","Mythic","Pure","Smart","Titanic","Necrotic","Ancient","Spiked","Cubic","Reinforced","Loving","Ridiculous","Empowered","Giant","Submerged","Jaded","Bizarre","Itchy","Ominous","Pleasant","Pretty","Shiny","Simple","Strange","Vivid","Godly","Demonic","Forceful","Hurtful","Keen","Strong","Unpleasant","Zealous","Silky","Bloody","Shaded","Sweet","Moil","Toil","Blessed","Bountiful","Magnetic","Fruitful","Refined","Stellar","Mithraic","Auspicious","Fleet","Heated","Ambered"]
+reforges = ["Fair","Renowned","Loving","Gentle","Odd","Fast","Fair","Epic","Sharp","Heroic","Spicy","Legendary","Dirty","Fabled","Suspicious","Gilded","Warped","Withered","Bulky","Salty","Treacherous","Stiff","Lucky","Very","Highly","Extremely","Thicc","Absolutely","Even More", "Wise","Strong","Superior","Heavy","Light","Perfect","Refined","Deadly","Fine","Grand","Hasty","Neat","Rapid","Unreal","Awkward","Rich","Precise","Spiritual","Headstrong","Clean","Fierce","Mythic","Pure","Smart","Titanic","Necrotic","Ancient","Spiked","Cubic","Reinforced","Loving","Ridiculous","Empowered","Giant","Submerged","Jaded","Bizarre","Itchy","Ominous","Pleasant","Pretty","Shiny","Simple","Strange","Vivid","Godly","Demonic","Forceful","Hurtful","Keen","Strong","Unpleasant","Zealous","Silky","Bloody","Shaded","Sweet","Moil","Toil","Blessed","Bountiful","Magnetic","Fruitful","Refined","Stellar","Mithraic","Auspicious","Fleet","Heated","Ambered"]
 commandStringBak = "`# NEW AUCTION FLIP FOUND!\n /ah {0}\n Expected Profit : **{1}**\n Risk : {2}\n Item Name : {3}`"
 commandString = ">>> __/ah__ **{0}**\n __Expected Profit__ : `{1}`\n __Risk__ : `{2}`\n __Item Name__ : `{3}`"
 global toggled 
@@ -134,9 +134,11 @@ async def on_message(message):
             await message.channel.send(">>> Min prof : " + str(minimumProf/1000000) +"m\nMax risk : " + str(maxRisk/1000000) + "m")
         elif message.content.startswith("!set"):
             if message.content.startswith("!setMin "):
-                minimumProf = int(message.content[9::])
+                minimumProf = int(message.content[8::])
+                await message.channel.send("set min prof to " + message.content[8::])
             elif message.content.startswith("!setMax "):
-                maxRisk = int(message.content[9::])
+                maxRisk = int(message.content[8::])
+                await message.channel.send("set max risk to " + message.content[8::])
 def RunProg():
     global toggled
     global aborting
