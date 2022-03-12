@@ -5,10 +5,7 @@ Make sure you have a config.json in the working folder
 it should be laid out like
 
 {
-    "token" : "Your Discord Token",
-    "clientid": "Your Discord App's Client ID",
-    "guildId": "Your Discord Server's id",
-    "apiKey": "Your hypixel api key"
+    "token" : "Your Discord Bot's Token",
 }
 
 """
@@ -84,8 +81,12 @@ def GetAh():
                         index = index.replace(re,"")
                     if index in currentAuctions:
                         # If this index already exists, add this to a list of them
-                        bop = currentAuctions[index]
-                        bop = bop.append(i)
+                        if len(index.get("AhObj").get("item_name").replace("✪", "")) + 5 == len(i.get("AhObj").get("item_name")):
+                            bop = currentAuctions[index]
+                            bop = bop.append(i)
+                        else:
+                            bop = currentAuctions[index.replace("✪", "")]
+                            bop = bop.append(i)
                     else:
                         # Create the first refrence of this item and give it an index in the dictionary!
                         currentAuctions[index] = [i]
@@ -128,54 +129,61 @@ def checkMinProf(Array):
             FinalArray.append(i)
     return FinalArray
 
-#                                                            |
-#I am tired, I will write comments for the code below later! v (Sorry) and its not all done but !getAh and !hello work which are the most important! if you want to contribute you can comment it :)
-
 @client.event
 async def on_ready():
+    # Just som basic log on stuff
     print('We have logged in as {0.user}'.format(client))
     time.sleep(10)
     status = discord.Game("Min Prof = {0}m ---- Max Risk = {1}m".format(minimumProf/1000000, maxRisk/1000000))
     await client.change_presence(status=discord.Status.idle, activity=status)
-
+# When the bot recieves a message anywhere
 @client.event
 async def on_message(message):
-    global toggled
+    # getting the global variables this script needs to work!
     global minimumProf
     global maxRisk
+    # If the bot send a message don't do anything to it
     if message.author == client.user:
         return
+    # Check that the message starts with the prefix
     if message.content.startswith('!'):
+        # Basic commands for fun cuz why not haha
         if message.content == "!hello":
             await message.channel.send("Hey qt {0.mention}!".format(message.author))
         elif message.content == '!help':
-            await message.channel.send(">>> Hey baby {0.mention}! we have some awesome commands \n``` - !abort (HENRY ONLY) \n - !hello \n - !getAh \n - !testMessage \n - !runCode (HENRY ONLY) \n - !checkVar \n !setMin #(min) \n !setMax #(max)```".format(message.author))
+            await message.channel.send(">>> Hey baby {0.mention}! we have some awesome commands \n``` - !abort (OWNER ONLY) \n - !hello \n - !getAh \n - !testMessage \n - !runCode (OWNER ONLY) \n - !checkVar \n !setMin #(min) \n !setMax #(max)```".format(message.author))
         elif message.content == "!abort":
-            toggled == False
             await message.channel.send("shutting down {0.mention}! Will be dead in 10 seconds".format(message.author))
             time.sleep(10)
             exit()
+        
+        # run through the functions we declared earlier
         elif message.content.startswith("!getAh"):
-            await message.channel.send("Getting AH")
+            await message.channel.send("Getting AH") # Status update
             global currentAuctions
-            GetAh()
-            await message.channel.send("Ah has been gotted, now sorting!")
-            sortedAh = SortAh()
-            await message.channel.send(">>> **Finding profitable auctions, enjoy profits rolling in!**")
-            checkedProf = checkMinProf(sortedAh)
+            GetAh() # Get all the auctions
+            await message.channel.send("Ah has been gotted, now sorting!") # Status update
+            sortedAh = SortAh() # Sort the auctions
+            await message.channel.send(">>> **Finding profitable auctions, enjoy profits rolling in!**") # Status update
+            checkedProf = checkMinProf(sortedAh) # Go through those sorted auctions and make sure they meet the minimum reqs
             for i in checkedProf:
-                if i.get("AhObj").get("starting_bid") < maxRisk:
+                if i.get("AhObj").get("starting_bid") < maxRisk: # ensure nothing is out of our price range!
+                    # Make sure the item is 5 star, as to price it like it
                     if len(i.get("AhObj").get("item_name").replace("✪", "")) + 5 == len(i.get("AhObj").get("item_name")):
                         user = ChangeUUIDToUsername(i.get("AhObj").get("auctioneer"))
                         await message.channel.send(commandString.format(user,i.get("Profit"),i.get("AhObj").get("starting_bid"),i.get("AhObj").get("item_name")))
-                    elif len(i.get("AhObj").get("item_name").replace("✪", "")) == len(i.get("AhObj").get("item_name")):
+                    # Everything else is just, considered no star
+                    else:
                         user = ChangeUUIDToUsername(i.get("AhObj").get("auctioneer"))
                         await message.channel.send(commandString.format(user,i.get("Profit"),i.get("AhObj").get("starting_bid"),i.get("AhObj").get("item_name")))
-            await message.channel.send("Finished")
+            await message.channel.send("Finished") # Status update
+        # Command to check that the command message is too your liking :)
         elif message.content == '!testMessage':
             await message.channel.send(commandString.format("TestUser","101","1001","TestItem"))
+        # Check the min prof and max risk
         elif message.content == "!checkVar":
             await message.channel.send(">>> Min prof : " + str(minimumProf/1000000) +"m\nMax risk : " + str(maxRisk/1000000) + "m")
+        # not currently working >:(
         elif message.content.startswith("!set"):
             if message.content.startswith("!setMin "):
                 minimumProf = int(message.content[8::])
@@ -184,6 +192,6 @@ async def on_message(message):
                 maxRisk = int(message.content[8::])
                 await message.channel.send("set max risk to " + message.content[8::])
 
-
+# Start up the client
 client.run(json.loads(open('config.json', 'r').read()).get("token"))
 
