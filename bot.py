@@ -81,12 +81,15 @@ def GetAh():
                         index = index.replace(re,"")
                     if index in currentAuctions:
                         # If this index already exists, add this to a list of them
-                        if len(index.get("AhObj").get("item_name").replace("✪", "")) + 5 == len(i.get("AhObj").get("item_name")):
-                            bop = currentAuctions[index]
-                            bop = bop.append(i)
-                        else:
-                            bop = currentAuctions[index.replace("✪", "")]
-                            bop = bop.append(i)
+                        try:
+                            if len(index.replace("✪", "")) + 5 == len(index):
+                                bop = currentAuctions[index]
+                                bop.append(i)
+                            else:
+                                bop = currentAuctions[index.replace("✪", "")]
+                                bop.append(i)
+                        except:
+                            print("")
                     else:
                         # Create the first refrence of this item and give it an index in the dictionary!
                         currentAuctions[index] = [i]
